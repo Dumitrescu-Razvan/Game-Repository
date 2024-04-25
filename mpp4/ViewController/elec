@@ -1,0 +1,14 @@
+ id |         name         | release_year | rating | company_id 
+----+----------------------+--------------+--------+------------
+  1 | a quidem.            |         2002 |     10 |          4
+  2 | quis.                |         2009 |      8 |         10
+  3 | omnis velit.         |         2010 |      3 |          9
+  4 | commodi voluptatem.  |         1992 |      9 |         10
+  5 | officiis nobis.      |         2013 |      6 |          7
+  6 | repellat voluptatem. |         1989 |      3 |          9
+  7 | eos.                 |         1993 |      3 |          8
+  8 | nulla.               |         1985 |      8 |          9
+  9 | repellat laudantium. |         2007 |      7 |          1
+ 10 | illo consequatur.    |         1994 |      9 |          1
+(10 rows)
+

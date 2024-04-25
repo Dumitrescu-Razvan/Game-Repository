@@ -1,0 +1,12 @@
+/home/dumi/MPP/mpp3/my-rocket-app/target/debug/deps/libasync_trait-622254b2b13da5c4.so: /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/lib.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/args.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/bound.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/expand.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/lifetime.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/parse.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/receiver.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/verbatim.rs
+
+/home/dumi/MPP/mpp3/my-rocket-app/target/debug/deps/async_trait-622254b2b13da5c4.d: /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/lib.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/args.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/bound.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/expand.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/lifetime.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/parse.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/receiver.rs /home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/verbatim.rs
+
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/lib.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/args.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/bound.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/expand.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/lifetime.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/parse.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/receiver.rs:
+/home/dumi/.cargo/registry/src/index.crates.io-6f17d22bba15001f/async-trait-0.1.79/src/verbatim.rs:
