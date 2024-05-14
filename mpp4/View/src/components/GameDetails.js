@@ -21,10 +21,11 @@ function GameDetails() {
   
     return (
       <Box className={classes.gameDetails}>
-        <Typography className={classes.gameDetailsTitle} style={{ fontWeight: 'bold'  , fontSize: '60px' }}>{game.title}</Typography>
+        <Typography className={classes.gameDetailsTitle} style={{ fontWeight: 'bold'  , fontSize: '60px' }}>{game.name}</Typography>
         <Typography variant="body1">Game ID: {id}</Typography>
-        <Typography variant="body1">Year: {game.year}</Typography>
+        <Typography variant="body1">Year: {game.release_year}</Typography>
         <Typography variant="body1">Rating: {game.rating}</Typography>
+        <Typography variant="body1">Company ID: {game.company_id}</Typography>
       </Box>
     );
   }

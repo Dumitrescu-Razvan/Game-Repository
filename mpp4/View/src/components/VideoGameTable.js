@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Typography, TableSortLabel, Container, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { deleteGame,  getGames, checkStatus, setGames } from '../Service/Service'; // Import the necessary functions from the service file
+import { deleteGame,  getGames, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
 import { useStyles } from '../styles/VideoGameTableStyle';
 import GameYearPieChart from './PieChart';
 
@@ -20,8 +20,7 @@ function VideoGameTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [selectedRow, setSelectedRow] = React.useState(null);
     const [serverStatus, setServerStatus] = React.useState(false);
-
-    // src/components/VideoGameTable.js
+    const [_, setCompanies] = React.useState([]); 
 
     useEffect(() => {
         getGames()
@@ -31,22 +30,38 @@ function VideoGameTable() {
             .catch((error) => {
                 console.error('Network error:', error);
             });
+        getCompanies()
+            .then((data) => {
+                setCompanies(data);
+            })
+            .catch((error) => {
+                console.error('Network error:', error);
+            });
     }, []);
 
-    useEffect(() => {
-        const ws = new WebSocket('ws://localhost:3002');
+let attempts = 0;
+const maxAttempts = 5;
+
+useEffect(() => {
+    let ws = null;
+
+    const connect = () => {
+        if (attempts >= maxAttempts) {
+            console.log('Max reconnection attempts reached');
+            return;
+        }
+
+        ws = new WebSocket('ws://localhost:3002');
 
         ws.onopen = () => {
             console.log('Websocket connected');
             setServerStatus(true);
+            attempts = 0; // reset attempts count on successful connection
         };
         ws.onmessage = (event) => {
             console.log('Received message:', event.data);
             //setGames(data);
-            //setSortedData(data);
-            
-
-            
+            //setSortedData(data); 
         };
         ws.onerror = (event) => {
             console.error('Websocket error:', event);
@@ -54,12 +69,16 @@ function VideoGameTable() {
         ws.onclose = (event) => {
             console.log('Websocket closed:', event);
             setServerStatus(false);
+            attempts++;
+            // Try to reconnect after a second
+            setTimeout(connect, 1000);
         }
-        
+    }
 
-        return () => ws.close();
-    }, []);
+    connect();
 
+    return () => ws && ws.close();
+}, []);
 
     const createSortHandler = (property) => {
         const isAsc = order === 'asc';
@@ -112,6 +131,17 @@ function VideoGameTable() {
     const handleChangeTable = async () => {
         navigate('/companies');
     };
+
+    const handleViewCompany = (id) => {
+        console.log(`View company button clicked for ${id}`);
+        navigate(`/company/${id}`);
+    };
+
+    // useEffect(() => {
+    //     if (serverStatus) {
+    //         syncGames();
+    //     }
+    // }, [serverStatus]);
 
     const gameYearData = sortedData.reduce((acc, game) => {
         const year = game.release_year;
@@ -199,6 +229,13 @@ function VideoGameTable() {
                                                         onClick={() => handleDeleteClick(row.id)}
                                                     >
                                                         Delete
+                                                    </Button>
+                                                    <Button
+                                                        style={{ backgroundColor: 'lightcoral' }}
+                                                        onClick={() => handleViewCompany(row.company_id)}
+                                                    >
+                                                        View Company
+
                                                     </Button>
                                                 </ButtonGroup>
                                             </TableCell>

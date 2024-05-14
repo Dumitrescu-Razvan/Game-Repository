@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { addGame } from "../Service/Service";
+import { addGame, getCompanies } from "../Service/Service";
 import { useStyles } from "../styles/AddGameStyle";
 
 
@@ -13,6 +13,7 @@ function AddGame() {
     const [year, setYear] = React.useState("");
     const [rating, setRating] = React.useState("");
     const [company_id, setCompany] = React.useState("1");
+    const [companies, setCompanies] = React.useState([]);
 
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
@@ -41,12 +42,22 @@ function AddGame() {
             name: title,
             release_year: parseInt(year),
             rating: parseInt(rating),
-            company_id: parseInt(company_id),
+            company_id: parseInt(company_id)
         };
         console.log(newGame);
         addGame(newGame);
         navigate("/");
     };
+
+    useEffect(() => {
+        getCompanies().then((companies) => {
+            setCompanies(companies);
+        })
+        .catch((error) => {
+            console.log(error);
+        }
+        );
+    }, []);
 
     return (
         <div className={classes.root}>
@@ -72,12 +83,12 @@ function AddGame() {
                 variant="outlined"
                 className={classes.cell}
             />
-            <TextField
-                label="Company"
-                value="1"
-                variant="outlined"
-                className={classes.cell}
-            />
+            <select name="company" onChange={handleCompanyChange} className={classes.cell}>
+                {companies.map((company) => (
+                    <option key={company.id} value={company.id}>{company.name}</option>
+                ))}
+            </select>
+
             <Button onClick={handleSave} className={classes.button}>Save</Button>
         </div>
     );

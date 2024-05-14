@@ -238,7 +238,6 @@ function CompanyTable() {
                         </ButtonGroup>
                     </Table>
                 </TableContainer>
-                <GameYearPieChart data={gameYearData} options={gameYearData}/>
             </Container>
         </div>
     );

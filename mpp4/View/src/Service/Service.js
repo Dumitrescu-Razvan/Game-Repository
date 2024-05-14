@@ -53,7 +53,6 @@ export const deleteCompany = async (id) => {
 }
 
 
-
 // export const setGames = async (games) => {
 //     const response = await axios.post(`${API_URL}/setgames`, games);
 //     return response.data;
