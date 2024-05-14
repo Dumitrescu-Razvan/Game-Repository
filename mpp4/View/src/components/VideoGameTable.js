@@ -1,18 +1,17 @@
 import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Typography, TableSortLabel, Container, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { deleteGame,  getGames, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
-import { useStyles } from '../styles/VideoGameTableStyle';
+import { deleteGame, getGames, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
 import GameYearPieChart from './PieChart';
 
 function VideoGameTable() {
-    const classes = useStyles();
+
     const navigate = useNavigate();
     const columns = [
         { id: 'name', label: 'Title' },
         { id: 'rating', label: 'Rating' },
         { id: 'release_year', label: 'Year' },
-        { id: 'company_id', label: 'Company'},
+        { id: 'company_id', label: 'Company' },
     ];
     const [order, setOrder] = React.useState('asc');
     const [sortedData, setSortedData] = React.useState([]);
@@ -20,7 +19,7 @@ function VideoGameTable() {
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [selectedRow, setSelectedRow] = React.useState(null);
     const [serverStatus, setServerStatus] = React.useState(false);
-    const [_, setCompanies] = React.useState([]); 
+    const [_, setCompanies] = React.useState([]);
 
     useEffect(() => {
         getGames()
@@ -39,46 +38,46 @@ function VideoGameTable() {
             });
     }, []);
 
-let attempts = 0;
-const maxAttempts = 5;
+    let attempts = 0;
+    const maxAttempts = 5;
 
-useEffect(() => {
-    let ws = null;
+    useEffect(() => {
+        let ws = null;
 
-    const connect = () => {
-        if (attempts >= maxAttempts) {
-            console.log('Max reconnection attempts reached');
-            return;
+        const connect = () => {
+            if (attempts >= maxAttempts) {
+                console.log('Max reconnection attempts reached');
+                return;
+            }
+
+            ws = new WebSocket('ws://localhost:3002');
+
+            ws.onopen = () => {
+                console.log('Websocket connected');
+                setServerStatus(true);
+                attempts = 0; // reset attempts count on successful connection
+            };
+            ws.onmessage = (event) => {
+                console.log('Received message:', event.data);
+                //setGames(data);
+                //setSortedData(data); 
+            };
+            ws.onerror = (event) => {
+                console.error('Websocket error:', event);
+            }
+            ws.onclose = (event) => {
+                console.log('Websocket closed:', event);
+                setServerStatus(false);
+                attempts++;
+                // Try to reconnect after a second
+                setTimeout(connect, 1000);
+            }
         }
 
-        ws = new WebSocket('ws://localhost:3002');
+        connect();
 
-        ws.onopen = () => {
-            console.log('Websocket connected');
-            setServerStatus(true);
-            attempts = 0; // reset attempts count on successful connection
-        };
-        ws.onmessage = (event) => {
-            console.log('Received message:', event.data);
-            //setGames(data);
-            //setSortedData(data); 
-        };
-        ws.onerror = (event) => {
-            console.error('Websocket error:', event);
-        }
-        ws.onclose = (event) => {
-            console.log('Websocket closed:', event);
-            setServerStatus(false);
-            attempts++;
-            // Try to reconnect after a second
-            setTimeout(connect, 1000);
-        }
-    }
-
-    connect();
-
-    return () => ws && ws.close();
-}, []);
+        return () => ws && ws.close();
+    }, []);
 
     const createSortHandler = (property) => {
         const isAsc = order === 'asc';
@@ -152,35 +151,45 @@ useEffect(() => {
         }
         return acc;
     }
-    , {});
+        , {});
 
     return (
-        <div>
-            <header className={classes.header}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+            <header sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'red' }}>
                 <h1>Video Game Table</h1>
                 {!serverStatus && <h2>Server is offline</h2>}
             </header>
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', top: '50px' }}>
-                <TableContainer className={classes.table} component={Paper}>
+                <TableContainer sx={{
+                    width: '80%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '20px',
+
+                }}
+                    component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 {columns.map((column) => (
                                     <TableCell
-                                    key={column.id}
-                                        className={classes.cell}
+                                        key={column.id}
+                                        sx={{ fontSize: 20, color: "darkblue" }}
                                         align='center'
-                                        >
+                                    >
                                         <TableSortLabel
                                             active={true}
                                             direction={order}
                                             onClick={() => createSortHandler(column.id)}
                                         >
-                                            <Typography className={classes.cell}>{column.label}</Typography>
+                                            <Typography sx={{ fontSize: 20, color: "darkblue" }}
+                                            >{column.label}</Typography>
                                         </TableSortLabel>
                                     </TableCell>
                                 ))
-                                
+
                                 }
                             </TableRow>
                         </TableHead>
@@ -190,7 +199,7 @@ useEffect(() => {
                                     <TableRow
                                         key={row.id}
                                         onClick={() => handleRowClick(row.id)}
-                                        className={classes.clickable}
+                                        sx={{ cursor: 'pointer' }}
                                     >
                                         {columns.map((column) => (
                                             <TableCell
@@ -200,7 +209,7 @@ useEffect(() => {
                                                 {row[column.id]}
                                             </TableCell>
                                         ))}
-                            
+
                                     </TableRow>
                                     {selectedRow === row.id && (
                                         <TableRow style={{ backgroundColor: 'darkgrey' }}>
@@ -211,7 +220,9 @@ useEffect(() => {
                                                 justifyContent='center'
                                                 alignItems='center'
                                             >
-                                                <ButtonGroup className={classes.ButtonGroup} variant='text'>
+                                                <ButtonGroup 
+                                                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                                variant='text'>
                                                     <Button
                                                         style={{ backgroundColor: 'lightblue' }}
                                                         onClick={() => handleViewClick(row.id)}
@@ -244,15 +255,15 @@ useEffect(() => {
                                 </>
                             ))}
                         </TableBody>
-                            <TablePagination
-                                component='div'
-                                count={sortedData.length}
-                                page={page}
-                                onPageChange={handlePageChange}
-                                rowsPerPage={rowsPerPage}
-                                onRowsPerPageChange={handleRowNumberChange}
-                                align='center'
-                            />
+                        <TablePagination
+                            component='div'
+                            count={sortedData.length}
+                            page={page}
+                            onPageChange={handlePageChange}
+                            rowsPerPage={rowsPerPage}
+                            onRowsPerPageChange={handleRowNumberChange}
+                            align='center'
+                        />
                         <ButtonGroup
                             variant='text'
                             align='center'
@@ -260,26 +271,26 @@ useEffect(() => {
                             justifyContent='center'
                             alignItems='center'
                         >
-                        <Button
-                            className={classes.AddButton}
-                            onClick={handleAddClick}
-                            align='center'
-                        >
-                            Add Game
-                        </Button>
-                        <Button
-                            className={classes.AddButton}
-                            onClick={handleChangeTable}
-                            align='center'
-                        >
-                            Change Table
-                        </Button>
+                            <Button
+                                sx={{ backgroundColor: 'lightblue' }}
+                                onClick={handleAddClick}
+                                align='center'
+                            >
+                                Add Game
+                            </Button>
+                            <Button
+                                sx={{ backgroundColor: 'lightgreen' }}
+                                onClick={handleChangeTable}
+                                align='center'
+                            >
+                                Change Table
+                            </Button>
                         </ButtonGroup>
                     </Table>
                 </TableContainer>
-                <GameYearPieChart data={gameYearData} options={gameYearData}/>
+                <GameYearPieChart data={gameYearData} options={gameYearData} />
             </Container>
-        </div>
+        </Container>
     );
 }
 

@@ -9,6 +9,8 @@ import { Route, Routes, useLocation } from 'react-router-dom';
 import AddCompany from './components/AddCompany';
 import EditCompany from './components/EditCompany';
 import CompanyDetails from './components/CompanyDetails';
+import Login from './components/Login';
+import Register from './components/Register';
 
 
 function App() {
@@ -23,7 +25,10 @@ function App() {
           <h1 className='title'>Video Game Ratings</h1>
         }
         <Routes>
-          <Route path='/' element={<VideoGameTable />} />
+          <Route path='/' element={<Login />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/games' element={<VideoGameTable />} />
           <Route path='/game/:id' element={<GameDetails />} />
           <Route path='/add' element={<AddGame />} />
           <Route path='/edit/:id' element={<EditGame />} />

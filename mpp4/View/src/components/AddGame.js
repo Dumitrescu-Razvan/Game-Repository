@@ -1,14 +1,12 @@
 import React, { useEffect } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, Container, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { addGame, getCompanies } from "../Service/Service";
-import { useStyles } from "../styles/AddGameStyle";
 
 
 
 function AddGame() {
     const navigate = useNavigate();
-    const classes = useStyles();
     const [title, setTitle] = React.useState("");
     const [year, setYear] = React.useState("");
     const [rating, setRating] = React.useState("");
@@ -34,7 +32,7 @@ function AddGame() {
             alert("All fields are required");
             return;
         }
-        else if (isNaN(year) || isNaN(rating) || isNaN(company_id))  {
+        else if (isNaN(year) || isNaN(rating) || isNaN(company_id)) {
             alert("Year and Rating must be numbers");
             return;
         }
@@ -53,44 +51,38 @@ function AddGame() {
         getCompanies().then((companies) => {
             setCompanies(companies);
         })
-        .catch((error) => {
-            console.log(error);
-        }
-        );
+            .catch((error) => {
+                console.log(error);
+            }
+            );
     }, []);
 
     return (
-        <div className={classes.root}>
-            <h2 className={classes.titleCell}>Add Game</h2>
-            <TextField
-                label="Title"
-                value={title}
-                onChange={handleTitleChange}
-                variant="outlined"
-                className={classes.cell}
-            />
-            <TextField
-                label="Year"
-                value={year}
-                onChange={handleYearChange}
-                variant="outlined"
-                className={classes.cell}
-            />
-            <TextField
-                label="Rating"
-                value={rating}
-                onChange={handleRatingChange}
-                variant="outlined"
-                className={classes.cell}
-            />
-            <select name="company" onChange={handleCompanyChange} className={classes.cell}>
+        <Container
+        sx = {{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            marginTop: "10px",
+            gap: "20px"
+        }}
+        >
+            <Typography variant="h2" sx={{ fontSize: 50, color: "darkblue" }}>
+                Add Game
+            </Typography>
+            <TextField label="Title" value={title} onChange={handleTitleChange} variant="outlined" sx={{fontSize: 20, color: "darkblue"}}/>
+            <TextField label="Year" value={year} onChange={handleYearChange} variant="outlined" sx={{fontSize: 20, color: "darkblue"}}/>
+
+            <TextField label="Rating" value={rating} onChange={handleRatingChange} variant="outlined" sx={{fontSize: 20, color: "darkblue"}}/>
+            <select name="company" onChange={handleCompanyChange} sx={{fontSize: 20, color: "darkblue"}}>
                 {companies.map((company) => (
                     <option key={company.id} value={company.id}>{company.name}</option>
                 ))}
             </select>
 
-            <Button onClick={handleSave} className={classes.button}>Save</Button>
-        </div>
+            <Button onClick={handleSave} sx={{fontSize: 20, color: "green"}}>Save</Button>
+        </Container>
     );
 }
 export default AddGame;

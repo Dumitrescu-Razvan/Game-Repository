@@ -1,11 +1,9 @@
 import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCompany, editCompany  } from "../Service/Service";
-import { useStyles } from "../styles/EditGameStyle";
-import { TextField, Button, Typography } from "@mui/material";
+import { getCompany, editCompany } from "../Service/Service";
+import { TextField, Button, Typography, Container } from "@mui/material";
 
 function EditCompany() {
-    const classes = useStyles();
     const navigate = useNavigate();
     const { id } = useParams();
     const [name, setName] = React.useState("");
@@ -43,8 +41,8 @@ function EditCompany() {
     };
 
     return (
-        <div className={classes.root}>
-            <Typography variant="h2" className={classes.titleCell}>
+        <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
+            <Typography variant="h2" sx={{ fontSize: 20, color: "darkblue" }}>
                 Edit Game
             </Typography>
             <Typography variant="body1">Game ID: {id}</Typography>
@@ -53,18 +51,24 @@ function EditCompany() {
                 value={name}
                 onChange={handleNameChange}
                 variant="outlined"
-                className={classes.cell}
+                sx={{ fontSize: 20, color: "darkblue" }}
             />
             <TextField
                 label="Location"
                 value={location}
                 onChange={handleLocationChange}
                 variant="outlined"
-                className={classes.cell}
+                sx={{ fontSize: 20, color: "darkblue" }}
             />
 
-            <Button onClick={handleSave} className={classes.button} variant="contained" color="primary">Save</Button>
-        </div>
+            <Button onClick={handleSave} sx={{
+                fontSize: 20,
+                color: "darkblue",
+                backgroundColor: "red",
+                marginTop: 20,
+
+            }} variant="contained" color="primary">Save</Button>
+        </Container>
     );
 }
 

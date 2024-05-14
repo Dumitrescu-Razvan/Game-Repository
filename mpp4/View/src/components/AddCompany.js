@@ -1,14 +1,12 @@
 import React from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, Container, TextField, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { addCompany } from "../Service/Service";
-import { useStyles } from "../styles/AddGameStyle";
 
 
 
 function AddCompany() {
     const navigate = useNavigate();
-    const classes = useStyles();
     const [name, setName] = React.useState("");
     const [location, setLocation] = React.useState("");
 
@@ -35,24 +33,41 @@ function AddCompany() {
     };
 
     return (
-        <div className={classes.root}>
-            <h2 className={classes.titleCell}>Add Game</h2>
+        <Container
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "20px",
+                marginTop: "20px"
+            }}
+        >
+            <Typography variant="h2" sx={{ fontSize: 50, color: "darkblue" }}>
+                Add Company
+            </Typography>
             <TextField
                 label="Name"
                 value={name}
                 onChange={handleNameChange}
                 variant="outlined"
-                className={classes.cell}
+                sx={{ fontSize: 20, color: "darkblue" }}
             />
             <TextField
                 label="Location"
                 value={location}
                 onChange={handleLocationChange}
                 variant="outlined"
-                className={classes.cell}
+                sx={{ fontSize: 20, color: "darkblue" }}
             />
-            <Button onClick={handleSave} className={classes.button}>Save</Button>
-        </div>
+            <Button onClick={handleSave} sx={{
+                fontSize: 20,
+                color: "darkblue",
+                backgroundColor: "red",
+                marginTop: "10px"
+            }} >Save</Button>
+
+        </Container>
     );
 }
 export default AddCompany;

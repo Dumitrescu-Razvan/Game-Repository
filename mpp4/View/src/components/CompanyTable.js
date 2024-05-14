@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Typography, TableSortLabel, Container, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { deleteCompany,  getCompanies, checkStatus } from '../Service/Service'; // Import the necessary functions from the service file
-import { useStyles } from '../styles/VideoGameTableStyle';
+import { deleteCompany, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
 import GameYearPieChart from './PieChart';
 
 function CompanyTable() {
-    const classes = useStyles();
     const navigate = useNavigate();
     const columns = [
         { id: 'name', label: 'Name' },
@@ -51,7 +49,7 @@ function CompanyTable() {
             console.log('Websocket closed:', event);
             setServerStatus(false);
         }
-        
+
 
         return () => ws.close();
     }, []);
@@ -118,37 +116,48 @@ function CompanyTable() {
         }
         return acc;
     }
-    , {});
+        , {});
 
     return (
-        <div>
-            <header className={classes.header}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+            <header sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',  color: 'red' }}>
                 <h1>Companies</h1>
                 {!serverStatus && <h2>Server is offline</h2>}
 
             </header>
 
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', top: '50px' }}>
-                <TableContainer className={classes.table} component={Paper}>
+                <TableContainer sx={{
+                    width: '80%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '20px',
+
+                }}
+                    component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 {columns.map((column) => (
                                     <TableCell
-                                    key={column.id}
-                                        className={classes.cell}
+                                        key={column.id}
+                                        sx={{ fontSize: 20, color: "darkblue" }}
+
                                         align='center'
-                                        >
+                                    >
                                         <TableSortLabel
                                             active={true}
                                             direction={order}
                                             onClick={() => createSortHandler(column.id)}
                                         >
-                                            <Typography className={classes.cell}>{column.label}</Typography>
+                                            <Typography sx={{ fontSize: 20, color: "darkblue" }}
+                                            >{column.label}</Typography>
                                         </TableSortLabel>
                                     </TableCell>
                                 ))
-                                
+
                                 }
                             </TableRow>
                         </TableHead>
@@ -158,7 +167,7 @@ function CompanyTable() {
                                     <TableRow
                                         key={row.id}
                                         onClick={() => handleRowClick(row.id)}
-                                        className={classes.clickable}
+                                        sx={{ cursor: 'pointer' }}
                                     >
                                         {columns.map((column) => (
                                             <TableCell
@@ -168,7 +177,7 @@ function CompanyTable() {
                                                 {row[column.id]}
                                             </TableCell>
                                         ))}
-                            
+
                                     </TableRow>
                                     {selectedRow === row.id && (
                                         <TableRow style={{ backgroundColor: 'darkgrey' }}>
@@ -179,7 +188,9 @@ function CompanyTable() {
                                                 justifyContent='center'
                                                 alignItems='center'
                                             >
-                                                <ButtonGroup className={classes.ButtonGroup} variant='text'>
+                                                <ButtonGroup
+                                                    sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: '20px' }}
+                                                    variant='text'>
                                                     <Button
                                                         style={{ backgroundColor: 'lightblue' }}
                                                         onClick={() => handleViewClick(row.id)}
@@ -205,15 +216,15 @@ function CompanyTable() {
                                 </>
                             ))}
                         </TableBody>
-                            <TablePagination
-                                component='div'
-                                count={sortedData.length}
-                                page={page}
-                                onPageChange={handlePageChange}
-                                rowsPerPage={rowsPerPage}
-                                onRowsPerPageChange={handleRowNumberChange}
-                                align='center'
-                            />
+                        <TablePagination
+                            component='div'
+                            count={sortedData.length}
+                            page={page}
+                            onPageChange={handlePageChange}
+                            rowsPerPage={rowsPerPage}
+                            onRowsPerPageChange={handleRowNumberChange}
+                            align='center'
+                        />
                         <ButtonGroup
                             variant='text'
                             align='center'
@@ -221,25 +232,25 @@ function CompanyTable() {
                             justifyContent='center'
                             alignItems='center'
                         >
-                        <Button
-                            className={classes.AddButton}
-                            onClick={handleAddClick}
-                            align='center'
-                        >
-                            Add Company
-                        </Button>
-                        <Button
-                            className={classes.AddButton}
-                            onClick={handleChangeTable}
-                            align='center'
-                        >
-                            Change Table
-                        </Button>
+                            <Button
+                                sx={{ backgroundColor: 'lightblue' }}
+                                onClick={handleAddClick}
+                                align='center'
+                            >
+                                Add Company
+                            </Button>
+                            <Button
+                                sx={{ backgroundColor: 'lightgreen' }}
+                                onClick={handleChangeTable}
+                                align='center'
+                            >
+                                Change Table
+                            </Button>
                         </ButtonGroup>
                     </Table>
                 </TableContainer>
             </Container>
-        </div>
+        </Container>
     );
 }
 
