@@ -1,1 +1,0 @@
-Pin<Box<dyn std::future::Future<Output = Outcome<rocket::State<Arc<std::sync::Mutex<GameRepository>>>, (rocket::http::Status, ()), rocket::http::Status>> + std::marker::Send>>
