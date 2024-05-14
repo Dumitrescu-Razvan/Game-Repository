@@ -61,7 +61,7 @@ pub fn delete_company(id: i32, repo: &State<GameRepository>) -> Option<Json<Comp
 }
 
 #[post("/login", format = "json", data = "<user>")]
-pub fn login(user: Json<VerifyUser>, repo: &State<UserRepository>) -> Option<Json<User>> {
+pub fn login(user: Json<VerifyUser>, repo: &State<UserRepository>) -> Result<Json<String>, String> {
     repo.verify_user(&user.username, &user.password).map(Json)
 }
 

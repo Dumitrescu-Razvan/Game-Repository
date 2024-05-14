@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, TextField, Box, ButtonGroup } from '@mui/material';
 import { login } from '../Service/Service';
-//import jwt from 'react-jwt';
 
 function Login() {
     const navigate = useNavigate();
@@ -21,10 +20,14 @@ function Login() {
         };
         console.log(user);
         login(user).then((response) => {
-            navigate('/games');
+           if(response.succes){
+               navigate('/games');
+           }else{
+            alert(response.error);
+              }
         }).catch((error) => {
             console.log(error);
-            alert("Incorrect username or password");
+            alert("An error occurred");
         });
 
         // const token = jwt.sign({username: username}, 'secret', {expiresIn: '1h'});

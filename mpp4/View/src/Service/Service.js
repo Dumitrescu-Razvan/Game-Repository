@@ -53,8 +53,18 @@ export const deleteCompany = async (id) => {
 }
 
 export const login = async (user) => {
-    const response = await axios.post(`${API_URL}/login`, user);
-    return response.data;
+
+        const response = await axios.post(`${API_URL}/login`, user);
+        console.log(response.data);
+
+        if(response.data === 'Wrong username' || response.data === 'Wrong password'){
+            return {succes: false, error: response.data};
+        }
+
+        const token = response.data;
+        localStorage.setItem('token', token);
+        return {succes: true, token: token};
+
 }
 
 export const register = async (user) => {

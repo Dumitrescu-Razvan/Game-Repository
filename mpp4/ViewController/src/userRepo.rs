@@ -4,6 +4,8 @@ use diesel::pg::PgConnection;
 use std::sync::Arc;
 use std::sync::Mutex;
 
+use jsonwebtoken::{encode, decode, Header, Validation, Algorithm, EncodingKey, DecodingKey};
+
 use crate::userModel::{User, NewUser};
 use crate::schema::users;
 
@@ -36,10 +38,23 @@ impl UserRepository{
             .expect("Error saving new user")
     }
 
-    pub fn verify_user(&self, username: &str, password: &str) -> Option<User> {
+    pub fn verify_user(&self, username: &str, password: &str) -> Result<String, String> {
         let mut conn = self.conn.lock().unwrap();
-        users::table.filter(users::username.eq(username).and(users::password.eq(password)))
+        let user = users::table.filter(users::username.eq(username))
             .first::<User>(&mut *conn)
-            .ok()
+            .ok();
+        
+        match user {
+            Some(user) => {
+                if user.password == password {
+                    //send token
+                    let token = encode(&Header::default(), &user, &EncodingKey::from_secret("secret".as_ref()));
+                    Ok(token.unwrap())
+                } else {
+                    Err("Wrong password".to_string())
+                }
+            },
+            None => Err("Wrong username".to_string())
+        }
     }
 }
