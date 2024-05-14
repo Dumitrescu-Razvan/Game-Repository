@@ -6,6 +6,9 @@ import AddGame from './components/AddGame';
 import EditGame from './components/EditGame';
 import CompanyTable from './components/CompanyTable'; 
 import { Route, Routes, useLocation } from 'react-router-dom';
+import AddCompany from './components/AddCompany';
+import EditCompany from './components/EditCompany';
+import CompanyDetails from './components/CompanyDetails';
 
 
 function App() {
@@ -25,9 +28,9 @@ function App() {
           <Route path='/add' element={<AddGame />} />
           <Route path='/edit/:id' element={<EditGame />} />
           <Route path='/companies' element={<CompanyTable/>} />
-          <Route path='/company/:id' element={<h1>Company Details</h1>} />
-          <Route path='/addcompany' element={<h1>Add Company</h1>} />
-          <Route path='/editcompany/:id' element={<h1>Edit Company</h1>} />
+          <Route path='/company/:id' element={<CompanyDetails/>} />
+          <Route path='/addcompany' element={<AddCompany/>} />
+          <Route path='/editcompany/:id' element={<EditCompany/>} />
           <Route path='*' element={<h1>Not Found</h1>} />
         </Routes>
       </header>

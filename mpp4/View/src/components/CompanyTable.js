@@ -40,12 +40,9 @@ function CompanyTable() {
         };
         ws.onmessage = (event) => {
             console.log('Received message:', event.data);
-            const data = JSON.parse(event.data);
+            //const data = JSON.parse(event.data);
             //setGames(data);
-            setSortedData(data);
-            
-
-            
+            //setSortedData(data);
         };
         ws.onerror = (event) => {
             console.error('Websocket error:', event);
@@ -79,18 +76,18 @@ function CompanyTable() {
 
     const handleAddClick = () => {
         console.log('Button clicked');
-        navigate('/add');
+        navigate('/addcompany');
         setSortedData([...sortedData]);
     };
 
     const handleViewClick = (id) => {
         console.log(`View button clicked for ${id}`);
-        navigate(`/game/${id}`);
+        navigate(`/company/${id}`);
     };
 
     const handleEditClick = (id) => {
         console.log(`Edit button clicked for ${id}`);
-        navigate(`/edit/${id}`);
+        navigate(`/editcompany/${id}`);
     };
 
     const handleDeleteClick = async (id) => {
@@ -126,8 +123,11 @@ function CompanyTable() {
     return (
         <div>
             <header className={classes.header}>
+                <h1>Companies</h1>
                 {!serverStatus && <h2>Server is offline</h2>}
+
             </header>
+
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', top: '50px' }}>
                 <TableContainer className={classes.table} component={Paper}>
                     <Table>
@@ -226,7 +226,7 @@ function CompanyTable() {
                             onClick={handleAddClick}
                             align='center'
                         >
-                            Add Game
+                            Add Company
                         </Button>
                         <Button
                             className={classes.AddButton}

@@ -99,8 +99,8 @@ async fn accept_connection(stream: tokio::net::TcpStream) {
         tokio::time::sleep(std::time::Duration::from_secs(5)).await;
         //let mut _repo = _repo.lock().await;
         //let games = _repo.create_random_games(10);
-        println!("Sending message");
+        //println!("Sending message");
         //send the games to the client
-        write.send(Message::text("Hello from the server")).await.unwrap();
+        //write.send(Message::text("Hello from the server")).await.unwrap();
     }
 }

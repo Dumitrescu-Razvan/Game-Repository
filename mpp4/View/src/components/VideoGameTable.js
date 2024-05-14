@@ -127,6 +127,7 @@ function VideoGameTable() {
     return (
         <div>
             <header className={classes.header}>
+                <h1>Video Game Table</h1>
                 {!serverStatus && <h2>Server is offline</h2>}
             </header>
             <Container style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px', position: 'relative', top: '50px' }}>
@@ -174,7 +175,7 @@ function VideoGameTable() {
                                     {selectedRow === row.id && (
                                         <TableRow style={{ backgroundColor: 'darkgrey' }}>
                                             <TableCell
-                                                colSpan={3}
+                                                colSpan={4}
                                                 align='center'
                                                 display='flex'
                                                 justifyContent='center'
