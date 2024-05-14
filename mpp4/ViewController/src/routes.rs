@@ -1,6 +1,8 @@
 use rocket::serde::json::Json;
 use crate::model::{Game, NewGame, UpdateGame, NewCompany, UpdateCompany, Company};
 use crate::repo::GameRepository;
+use crate::userModel::{User, VerifyUser, NewUser};
+use crate::userRepo::UserRepository;
 use rocket::State;
 
 #[get("/")]
@@ -56,6 +58,16 @@ pub fn update_company(id: i32, company: Json<UpdateCompany>, repo: &State<GameRe
 #[delete("/companies/<id>")]
 pub fn delete_company(id: i32, repo: &State<GameRepository>) -> Option<Json<Company>> {
     repo.delete_company(id).map(Json)
+}
+
+#[post("/login", format = "json", data = "<user>")]
+pub fn login(user: Json<VerifyUser>, repo: &State<UserRepository>) -> Option<Json<User>> {
+    repo.verify_user(&user.username, &user.password).map(Json)
+}
+
+#[post("/register", format = "json", data = "<user>")]
+pub fn register(user: Json<NewUser>, repo: &State<UserRepository>) -> Json<User> {
+    Json(repo.create_user(user.into_inner()))
 }
 
 

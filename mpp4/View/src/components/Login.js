@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, TextField, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Button, TextField, Box, ButtonGroup } from '@mui/material';
+import { login } from '../Service/Service';
+//import jwt from 'react-jwt';
 
 function Login() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const handleSubmit = async (event) => {
-        if(username === '' || password === '') {
+        if (username === '' || password === '') {
             alert("All fields are required");
             return;
         }
@@ -16,8 +19,19 @@ function Login() {
             username: username,
             password: password,
         };
+        console.log(user);
+        login(user).then((response) => {
+            navigate('/games');
+        }).catch((error) => {
+            console.log(error);
+            alert("Incorrect username or password");
+        });
 
-        
+        // const token = jwt.sign({username: username}, 'secret', {expiresIn: '1h'});
+        // return token;
+
+
+
     }
 
     return (
@@ -26,21 +40,25 @@ function Login() {
             flexDirection: 'column',
             gap: '10px',
             alignItems: 'center',
+            justifyContent: 'center',
         }}>
-            <TextField 
-                label="Username" 
-                variant="outlined" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+            <TextField
+                label="Username"
+                variant="outlined"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
             />
-            <TextField 
-                label="Password" 
-                type="password" 
-                variant="outlined" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+            <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit" variant="contained">Submit</Button>
+            <ButtonGroup sx={{ display: 'flex', justifyContent: 'centre', align: 'center' }}>
+                <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                <Button variant="contained" onClick={() => navigate('/register')}>Register</Button>
+            </ButtonGroup>
         </Box>
     );
 }

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { Button, TextField, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { register } from '../Service/Service';
+import { Button, TextField, Box, ButtonGroup } from '@mui/material';
 
 function Register() {
+    const navigate = useNavigate();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
@@ -22,6 +24,16 @@ function Register() {
             alert("All fields are required");
             return;
         }
+
+        const user = {
+            username: username,
+            password: password,
+            email: email,
+        };
+
+        console.log(user);
+        register(user);
+        navigate('/login');
 
 
         
@@ -63,7 +75,10 @@ function Register() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
             />
-            <Button type="submit" variant="contained">Submit</Button>
+            <ButtonGroup sx={{ display: 'flex', justifyContent: 'centre', align: 'center' }}>
+            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+            <Button variant="contained" onClick={() => navigate('/login')}>Login</Button>
+            </ButtonGroup>
         </Box>
     );
 }

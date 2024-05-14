@@ -21,9 +21,22 @@ diesel::table! {
     }
 }
 
+diesel::table! {
+    users (id) {
+        id -> Int4,
+        #[max_length = 255]
+        username -> Varchar,
+        #[max_length = 256]
+        password -> Varchar,
+        #[max_length = 255]
+        email -> Varchar,
+    }
+}
+
 diesel::joinable!(games -> companies (company_id));
 
 diesel::allow_tables_to_appear_in_same_query!(
     companies,
     games,
+    users,
 );

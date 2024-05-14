@@ -24,9 +24,12 @@ mod repo;
 mod routes;
 mod tests;
 mod schema;
+mod userRepo;
+mod userModel;
 
 use repo::GameRepository;
 use routes::*;
+use userRepo::UserRepository;
 
 #[rocket::main]
 async fn main() {
@@ -56,6 +59,7 @@ async fn main() {
     let config = Config::figment().merge(("port", 3001));
 
     let game_repository = GameRepository::new(&connection);
+    let user_repository = UserRepository::new(&connection);
     //game_repository.generate_fake_data(10, 10);
 
     let ws_repo = GameRepository::new(&connection);
@@ -73,8 +77,9 @@ async fn main() {
     
     rocket::custom(config)
         .manage(game_repository)
+        .manage(user_repository)
         .attach(cors)
-        .mount("/", routes![index, get_all_games, get_by_id, create, update, delete, get_all_companies, get_company_by_id, create_company, update_company, delete_company])
+        .mount("/", routes![index, get_all_games, get_by_id, create, update, delete, get_all_companies, get_company_by_id, create_company, update_company, delete_company, login, register])
         .launch()
         .await
         .unwrap();

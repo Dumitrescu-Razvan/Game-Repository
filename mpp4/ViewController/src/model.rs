@@ -1,4 +1,5 @@
 use diesel::prelude::*;
+use fake::Opt;
 use serde::{Deserialize, Serialize};
 use crate::schema::{companies, games};
 
