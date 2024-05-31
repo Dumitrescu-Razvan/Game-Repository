@@ -104,7 +104,7 @@ function CompanyTable() {
     };
 
     const handleChangeTable = async () => {
-        navigate('/');
+        navigate('/games');
     };
 
     const gameYearData = sortedData.reduce((acc, game) => {

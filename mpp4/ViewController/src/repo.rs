@@ -5,6 +5,7 @@ use fake::locales::EN;
 use fake::Fake;
 use rand::prelude::*;
 
+
 use diesel::pg::PgConnection;
 use diesel::prelude::*;
 

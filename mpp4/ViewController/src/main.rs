@@ -4,18 +4,13 @@
 extern crate rocket;
 extern crate dotenv;
 
-use std::sync::Arc;
 use std::env;
-use diesel::connection;
 use rocket::http::Method;
 use rocket::Config;
 use rocket_cors::{AllowedOrigins, CorsOptions};
-use tokio::sync::Mutex;
 
-use rocket::futures::SinkExt;
 use rocket::futures::StreamExt;
 use tokio::net::TcpListener;
-use tokio_tungstenite::tungstenite::protocol::Message;
 
 use dotenv::dotenv;
 
@@ -24,13 +19,14 @@ mod repo;
 mod routes;
 mod tests;
 mod schema;
-mod userRepo;
-mod userModel;
+mod user_repo;
+mod user_model;
 
 use repo::GameRepository;
 use routes::*;
-use userRepo::UserRepository;
-
+use user_repo::UserRepository;
+//disable the unused code warning
+#[allow(unused)]
 #[rocket::main]
 async fn main() {
     dotenv().ok();
@@ -79,7 +75,7 @@ async fn main() {
         .manage(game_repository)
         .manage(user_repository)
         .attach(cors)
-        .mount("/", routes![index, get_all_games, get_by_id, create, update, delete, get_all_companies, get_company_by_id, create_company, update_company, delete_company, login, register])
+        .mount("/", routes![index, get_all_games, get_by_id, create, update, delete, get_all_companies, get_company_by_id, create_company, update_company, delete_company, login, register, authorize])
         .launch()
         .await
         .unwrap();
@@ -96,7 +92,7 @@ async fn accept_connection(stream: tokio::net::TcpStream) {
 
     println!("WebSocket connection established");
 
-    let (mut write, _) = ws_stream.split();
+    let (_write, _) = ws_stream.split();
 
     println!("WebSocket connection split");
 

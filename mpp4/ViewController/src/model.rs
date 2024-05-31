@@ -1,5 +1,4 @@
 use diesel::prelude::*;
-use fake::Opt;
 use serde::{Deserialize, Serialize};
 use crate::schema::{companies, games};
 
@@ -22,7 +21,7 @@ pub struct Company {
 }
 
 #[derive(Insertable, Deserialize, AsChangeset)]
-#[table_name = "games"]
+#[diesel(table_name = games)]
 #[serde(crate="rocket::serde")]
 pub struct NewGame {
     pub name: String,
@@ -32,7 +31,7 @@ pub struct NewGame {
 }
 
 #[derive(Insertable, Deserialize, AsChangeset)]
-#[table_name = "companies"]
+#[diesel(table_name = companies)]
 #[serde(crate="rocket::serde")]
 pub struct NewCompany {
     pub name: String,
@@ -40,7 +39,7 @@ pub struct NewCompany {
 }
 
 #[derive(AsChangeset, Deserialize)]
-#[table_name = "games"]
+#[diesel(table_name = games)]
 #[serde(crate="rocket::serde")]
 pub struct UpdateGame {
     pub name: Option<String>,
@@ -50,7 +49,7 @@ pub struct UpdateGame {
 }
 
 #[derive(AsChangeset, Deserialize)]
-#[table_name = "companies"]
+#[diesel(table_name = companies)]
 #[serde(crate="rocket::serde")]
 pub struct UpdateCompany {
     pub name: Option<String>,

@@ -1,9 +1,15 @@
+use rocket::http::CookieJar;
 use rocket::serde::json::Json;
 use crate::model::{Game, NewGame, UpdateGame, NewCompany, UpdateCompany, Company};
 use crate::repo::GameRepository;
-use crate::userModel::{User, VerifyUser, NewUser};
-use crate::userRepo::UserRepository;
+use crate::user_model::{User, VerifyUser, NewUser};
+use crate::user_repo::{UserRepository, Claims};
 use rocket::State;
+use jsonwebtoken::{decode, Validation, Algorithm, DecodingKey};
+use chrono::{Utc, Duration, Local};
+use serde::Deserialize;
+
+
 
 #[get("/")]
 pub fn index() -> &'static str {
@@ -61,8 +67,15 @@ pub fn delete_company(id: i32, repo: &State<GameRepository>) -> Option<Json<Comp
 }
 
 #[post("/login", format = "json", data = "<user>")]
-pub fn login(user: Json<VerifyUser>, repo: &State<UserRepository>) -> Result<Json<String>, String> {
-    repo.verify_user(&user.username, &user.password).map(Json)
+pub fn login(user: Json<VerifyUser>, repo: &State<UserRepository>, cookies : &CookieJar<'_>) -> Result<Json<String>, String> {
+    match repo.verify_user(&user.username, &user.password) {
+        Ok(token) => {
+            cookies.add(rocket::http::Cookie::new("token", token.clone()));
+            Ok(Json(token))
+        },
+        Err(e) => Err(e)
+        
+    }
 }
 
 #[post("/register", format = "json", data = "<user>")]
@@ -70,11 +83,41 @@ pub fn register(user: Json<NewUser>, repo: &State<UserRepository>) -> Json<User>
     Json(repo.create_user(user.into_inner()))
 }
 
+#[derive(Deserialize)]
+pub struct AuthData {
+    token: String,
+    username: String,
+}
 
-
-// #[post("/setgames", format = "json", data = "<games>")]
-// pub fn set_games(games: Json<Vec<Game>>, repo: &State<GameRepository>) {
-//     // let games = games.into_inner();
-//     // repo.set_games(games);
-
-// }
+//authorize user
+#[post("/authorize", format = "json", data = "<data>")]
+pub fn authorize(data: Json<AuthData>, repo: &State<UserRepository>) -> Result<Json<String>, String> {
+    let token = &data.token;
+    let username = &data.username;
+    // find user by username
+    let user = repo.get_user_by_username(&username).unwrap();
+    let token_data = decode::<Claims>(&token, &DecodingKey::from_secret("secret".as_ref()), &Validation::new(Algorithm::HS256));
+    match token_data {
+        Ok(token_data) => {
+            if token_data.claims.iss == user.id.to_string() && token_data.claims.sub == user.username && token_data.claims.exp > Local::now().timestamp() {
+                let now = Utc::now();
+                let iat = now.timestamp();
+                let exp = (now + Duration::hours(1)).timestamp();
+                let _claims = Claims{
+                    iss: user.id.to_string(),
+                    sub: user.username,
+                    iat,
+                    exp,
+                };
+                // let token = encode(&Header::default(), &claims, &EncodingKey::from_secret("secret".as_ref()));
+                // print!("{:?}\n", token_data.claims.exp);
+                // print!("{:?}\n", Local::now().timestamp());
+            
+                Ok(Json("Authorized".to_string()))
+            } else {
+                Err("Invalid token".to_string())
+            }
+        },
+        Err(_) => Err("Invalid token".to_string())
+    }
+}

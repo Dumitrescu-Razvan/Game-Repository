@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Typography, TableSortLabel, Container, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { deleteGame, getGames, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
+import { deleteGame, getGames, getCompanies, authToken } from '../Service/Service'; // Import the necessary functions from the service file
 import GameYearPieChart from './PieChart';
 
 function VideoGameTable() {

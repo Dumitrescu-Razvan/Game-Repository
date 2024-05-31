@@ -63,6 +63,7 @@ export const login = async (user) => {
 
         const token = response.data;
         localStorage.setItem('token', token);
+        localStorage.setItem('username', user.username);
         return {succes: true, token: token};
 
 }
@@ -72,6 +73,18 @@ export const register = async (user) => {
     return response.data;
 }
 
+export const authToken = async () => {
+    let token = localStorage.getItem('token');
+    let username = localStorage.getItem('username');
+    const response = await axios.post(`${API_URL}/authorize`, {token, username});
+    console.log(response.data);
+    if(response.data === 'Authorized'){
+            return 'Authorized';
+        }
+    else{
+        return 'Unauthorized';
+    }
+}
 // export const setGames = async (games) => {
 //     const response = await axios.post(`${API_URL}/setgames`, games);
 //     return response.data;

@@ -5,16 +5,42 @@ import GameDetails from './components/GameDetails';
 import AddGame from './components/AddGame';
 import EditGame from './components/EditGame';
 import CompanyTable from './components/CompanyTable'; 
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Routes, useLocation, Route } from 'react-router-dom';
 import AddCompany from './components/AddCompany';
 import EditCompany from './components/EditCompany';
 import CompanyDetails from './components/CompanyDetails';
 import Login from './components/Login';
 import Register from './components/Register';
-
+import { Navigate } from 'react-router-dom';
+import { authToken } from './Service/Service';
+import { useState } from 'react';
 
 function App() {
   const location = useLocation();
+  const [auth, setAuth] = useState(false);
+
+  function ProtectedRoute({ element, ...rest }) {
+    const _ = authToken().then((response) => {
+      if(response === 'Authorized'){
+        setAuth(true);
+      }
+      else{
+        setAuth(false);
+      }
+    }
+    ).catch((error) => {
+      console.log(error);
+      setAuth(false);
+      return <Navigate to='/login' />
+    });
+    console.log(auth);
+    if(auth){
+      return element;
+    }
+    else{
+      return <Navigate to='/login' />
+    }
+  }
 
 
   return (
@@ -28,15 +54,15 @@ function App() {
           <Route path='/' element={<Login />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
-          <Route path='/games' element={<VideoGameTable />} />
-          <Route path='/game/:id' element={<GameDetails />} />
-          <Route path='/add' element={<AddGame />} />
-          <Route path='/edit/:id' element={<EditGame />} />
-          <Route path='/companies' element={<CompanyTable/>} />
-          <Route path='/company/:id' element={<CompanyDetails/>} />
-          <Route path='/addcompany' element={<AddCompany/>} />
-          <Route path='/editcompany/:id' element={<EditCompany/>} />
-          <Route path='*' element={<h1>Not Found</h1>} />
+          <Route path='/games' element={<ProtectedRoute element={<VideoGameTable />} />} />
+          <Route path='/game/:id' element={<ProtectedRoute element={<GameDetails />} />} />
+          <Route path='/add' element={<ProtectedRoute element={<AddGame />} />} />
+          <Route path='/edit/:id' element={<ProtectedRoute element={<EditGame />} />} />
+          <Route path='/companies' element={<ProtectedRoute element={<CompanyTable/>} />} />
+          <Route path='/company/:id' element={<ProtectedRoute element={<CompanyDetails/>} />} />
+          <Route path='/addcompany' element={<ProtectedRoute element={<AddCompany/>} />} />
+          <Route path='/editcompany/:id' element={<ProtectedRoute element={<EditCompany/>} />} />
+          <Route path='*' element={<ProtectedRoute element={<h1>Not Found</h1>} />} />
         </Routes>
       </header>
     </div>

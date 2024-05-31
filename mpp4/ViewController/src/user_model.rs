@@ -1,5 +1,4 @@
 use diesel::prelude::*;
-use fake::Opt;
 use serde::{Deserialize,Serialize};
 use crate::schema::users;
 
@@ -13,7 +12,7 @@ pub struct User{
 }
 
 #[derive(Insertable,Deserialize,AsChangeset)]
-#[table_name="users"]
+#[diesel(table_name=users)]
 #[serde(crate="rocket::serde")]
 pub struct NewUser{
     pub username: String,
@@ -22,7 +21,7 @@ pub struct NewUser{
 }
 
 #[derive(Insertable,Deserialize,AsChangeset)]
-#[table_name="users"]
+#[diesel(table_name=users)]
 #[serde(crate="rocket::serde")]
 pub struct VerifyUser{
     pub username: String,

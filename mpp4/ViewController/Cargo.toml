@@ -19,3 +19,4 @@ futures = "0.3.30"
 dotenv = "0.15.0"
 diesel = { version = "2.1.1", features = ["sqlite", "chrono", "r2d2", "postgres"] }
 jsonwebtoken = "9.3.0"
+chrono = { version = "0.4.19", features = ["serde"] }
