@@ -4,10 +4,10 @@
 extern crate rocket;
 extern crate dotenv;
 
-use std::env;
 use rocket::http::Method;
 use rocket::Config;
 use rocket_cors::{AllowedOrigins, CorsOptions};
+use std::env;
 
 use rocket::futures::StreamExt;
 use tokio::net::TcpListener;
@@ -17,10 +17,10 @@ use dotenv::dotenv;
 mod model;
 mod repo;
 mod routes;
-mod tests;
 mod schema;
-mod user_repo;
+mod tests;
 mod user_model;
+mod user_repo;
 
 use repo::GameRepository;
 use routes::*;
@@ -30,8 +30,8 @@ use user_repo::UserRepository;
 #[rocket::main]
 async fn main() {
     dotenv().ok();
-    let connection = env::var ("DATABASE_URL").expect("DATABASE_URL must be set");
-    
+    let connection = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+
     let (tx, mut rx) = tokio::sync::oneshot::channel();
 
     let cors = CorsOptions::default()
@@ -70,19 +70,41 @@ async fn main() {
             tokio::spawn(accept_connection(stream));
         }
     });
-    
+
     rocket::custom(config)
         .manage(game_repository)
         .manage(user_repository)
         .attach(cors)
-        .mount("/", routes![index, get_all_games, get_by_id, create, update, delete, get_all_companies, get_company_by_id, create_company, update_company, delete_company, login, register, authorize])
+        .mount(
+            "/",
+            routes![
+                index,
+                get_all_games,
+                get_by_id,
+                create,
+                update,
+                delete,
+                get_all_companies,
+                get_company_by_id,
+                create_company,
+                update_company,
+                delete_company,
+                login,
+                register,
+                authorize,
+                get_all_users,
+                get_user_by_id,
+                update_user,
+                delete_user
+            ],
+        )
         .launch()
         .await
         .unwrap();
 
     let _ = tx.send(());
 
-  //  let _ = ws_task.await;
+    //  let _ = ws_task.await;
 }
 
 async fn accept_connection(stream: tokio::net::TcpStream) {

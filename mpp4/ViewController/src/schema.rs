@@ -30,6 +30,8 @@ diesel::table! {
         password -> Varchar,
         #[max_length = 255]
         email -> Varchar,
+        #[sql_name = "type"]
+        type_ -> Nullable<Int4>,
     }
 }
 

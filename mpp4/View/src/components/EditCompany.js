@@ -26,7 +26,6 @@ function EditCompany() {
 
 
     const handleSave = () => {
-        console.log("Save clicked");
         if (name === "" || location === "") {
             alert("All fields are required");
             return;
@@ -43,9 +42,9 @@ function EditCompany() {
     return (
         <Container sx={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100vh" }}>
             <Typography variant="h2" sx={{ fontSize: 20, color: "darkblue" }}>
-                Edit Game
+                Edit Company
             </Typography>
-            <Typography variant="body1">Game ID: {id}</Typography>
+            <Typography variant="body1">Company ID: {id}</Typography>
             <TextField
                 label="Name"
                 value={name}

@@ -19,7 +19,6 @@ function Login() {
             username: username,
             password: password,
         };
-        console.log(user);
         login(user).then((response) => {
            if(response.succes){
                navigate('/games');
@@ -30,12 +29,6 @@ function Login() {
             console.log(error);
             alert("An error occurred");
         });
-
-        // const token = jwt.sign({username: username}, 'secret', {expiresIn: '1h'});
-        // return token;
-
-
-
     }
 
     return (

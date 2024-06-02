@@ -11,6 +11,8 @@ import EditCompany from './components/EditCompany';
 import CompanyDetails from './components/CompanyDetails';
 import Login from './components/Login';
 import Register from './components/Register';
+import UserTable from './components/UserTable';
+import EditUser from './components/EditUser';
 import { Navigate } from 'react-router-dom';
 import { authToken } from './Service/Service';
 import { useState } from 'react';
@@ -62,6 +64,9 @@ function App() {
           <Route path='/company/:id' element={<ProtectedRoute element={<CompanyDetails/>} />} />
           <Route path='/addcompany' element={<ProtectedRoute element={<AddCompany/>} />} />
           <Route path='/editcompany/:id' element={<ProtectedRoute element={<EditCompany/>} />} />
+          <Route path='/users' element={<ProtectedRoute element={<UserTable/>} />} />
+          {/* <Route path='/user/:id' element={<ProtectedRoute element={<UserDetails/>} />} /> */}
+          <Route path='/edituser/:id' element={<ProtectedRoute element={<EditUser/>} />} />
           <Route path='*' element={<ProtectedRoute element={<h1>Not Found</h1>} />} />
         </Routes>
       </header>

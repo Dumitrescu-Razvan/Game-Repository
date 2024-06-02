@@ -1,14 +1,17 @@
 import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Typography, TableSortLabel, Container, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { deleteCompany, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
-import GameYearPieChart from './PieChart';
+import { deleteUser, getUsers } from '../Service/Service'; // Import the necessary functions from the service file
 
-function CompanyTable() {
+function UserTable() {
     const navigate = useNavigate();
     const columns = [
-        { id: 'name', label: 'Name' },
-        { id: 'location', label: 'Location' },
+        { id: 'id', label: 'ID' },
+        { id: 'username', label: 'Username' },
+        { id: 'email', label: 'Email' },
+        { id: 'password', label: 'Password'},
+        { id: 'type_', label: 'Role' },
+
     ];
     const [order, setOrder] = React.useState('asc');
     const [sortedData, setSortedData] = React.useState([]);
@@ -22,7 +25,7 @@ function CompanyTable() {
 
     useEffect(() => {
         setUserType(parseInt(localStorage.getItem('role')));
-        getCompanies()
+        getUsers()
             .then((data) => {
                 setSortedData(data);
             })
@@ -67,23 +70,19 @@ function CompanyTable() {
         setSelectedRow(selectedRow === id ? null : id);
     };
 
-    const handleAddClick = () => {
-        navigate('/addcompany');
-        setSortedData([...sortedData]);
-    };
 
     const handleViewClick = (id) => {
-        navigate(`/company/${id}`);
+        navigate(`/user/${id}`);
     };
 
     const handleEditClick = (id) => {
-        navigate(`/editcompany/${id}`);
+        navigate(`/edituser/${id}`);
     };
 
     const handleDeleteClick = async (id) => {
-        if (window.confirm('Are you sure you want to delete this company?')) {
-            await deleteCompany(id); // Call the new deleteCompany function from the service
-            const data = await getCompanies(); // Fetch updated data after deletion
+        if (window.confirm('Are you sure you want to delete this user?')) {
+            await deleteUser(id); // Call the new deleteCompany function from the service
+            const data = await getUsers(); // Fetch updated data after deletion
             setSortedData([...data]);
         }
         selectedRow === id && setSelectedRow(null);
@@ -98,21 +97,11 @@ function CompanyTable() {
         navigate('/games');
     };
 
-    const gameYearData = sortedData.reduce((acc, game) => {
-        const year = game.release_year;
-        if (acc[year]) {
-            acc[year]++;
-        } else {
-            acc[year] = 1;
-        }
-        return acc;
-    }
-        , {});
 
     return (
         <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <header sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',  color: 'red' }}>
-                <h1>Companies</h1>
+                <h1>Users</h1>
                 {!serverStatus && <h2>Server is offline</h2>}
 
             </header>
@@ -173,7 +162,7 @@ function CompanyTable() {
                                     {selectedRow === row.id && (
                                         <TableRow style={{ backgroundColor: 'darkgrey' }}>
                                             <TableCell
-                                                colSpan={3}
+                                                colSpan={5}
                                                 align='center'
                                                 display='flex'
                                                 justifyContent='center'
@@ -230,16 +219,7 @@ function CompanyTable() {
                             >
                                 Change Table
                             </Button>
-                            <Button
-                                sx={{ backgroundColor: 'lightblue' }}
-                                onClick={handleAddClick}
-                                align='center'
-                                style={{visibility: userType >= 1 ? 'visible' : 'hidden'}}
-                            >
-                                Add Company
-                            </Button>
                         </ButtonGroup>
-                        
                     </Table>
                 </TableContainer>
             </Container>
@@ -247,4 +227,4 @@ function CompanyTable() {
     );
 }
 
-export default CompanyTable;
+export default UserTable;

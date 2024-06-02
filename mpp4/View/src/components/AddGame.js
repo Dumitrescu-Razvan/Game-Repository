@@ -27,7 +27,6 @@ function AddGame() {
     }
 
     const handleSave = () => {
-        console.log("Save clicked");
         if (title === "" || year === "" || rating === "") {
             alert("All fields are required");
             return;
@@ -42,9 +41,8 @@ function AddGame() {
             rating: parseInt(rating),
             company_id: parseInt(company_id)
         };
-        console.log(newGame);
         addGame(newGame);
-        navigate("/");
+        navigate("/games");
     };
 
     useEffect(() => {
@@ -82,6 +80,7 @@ function AddGame() {
             </select>
 
             <Button onClick={handleSave} sx={{fontSize: 20, color: "green"}}>Save</Button>
+            <Button onClick={() => navigate("/games")} sx={{fontSize: 20, color: "red"}}>Cancel</Button>
         </Container>
     );
 }

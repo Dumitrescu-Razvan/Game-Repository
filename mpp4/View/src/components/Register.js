@@ -11,16 +11,16 @@ function Register() {
     const [email, setEmail] = useState('');
 
     const handleSubmit = async (event) => {
-        if(password !== confirmPassword) {
+        if (password !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
-        if(password.length < 8) {
+        if (password.length < 8) {
             alert("Password must be at least 8 characters");
             return;
         }
 
-        if(username === '' || password === '' || email === '') {
+        if (username === '' || password === '' || email === '') {
             alert("All fields are required");
             return;
         }
@@ -29,16 +29,16 @@ function Register() {
             username: username,
             password: password,
             email: email,
+            type_: 0,
         };
 
-        console.log(user);
         register(user);
         navigate('/login');
 
 
-        
 
-       
+
+
     };
 
     return (
@@ -49,18 +49,18 @@ function Register() {
             alignItems: 'center',
         }}
         >
-            <TextField 
-                label="Username" 
-                variant="outlined" 
-                value={username} 
-                onChange={(e) => setUsername(e.target.value)} 
+            <TextField
+                label="Username"
+                variant="outlined"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
             />
-            <TextField 
-                label="Password" 
-                type="password" 
-                variant="outlined" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
+            <TextField
+                label="Password"
+                type="password"
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
             />
             <TextField
                 label="Confirm Password"
@@ -76,8 +76,8 @@ function Register() {
                 onChange={(e) => setEmail(e.target.value)}
             />
             <ButtonGroup sx={{ display: 'flex', justifyContent: 'centre', align: 'center' }}>
-            <Button variant="contained" onClick={handleSubmit}>Submit</Button>
-            <Button variant="contained" onClick={() => navigate('/login')}>Login</Button>
+                <Button variant="contained" onClick={handleSubmit}>Submit</Button>
+                <Button variant="contained" onClick={() => navigate('/login')}>Login</Button>
             </ButtonGroup>
         </Box>
     );

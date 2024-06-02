@@ -18,7 +18,6 @@ function AddCompany() {
     }
 
     const handleSave = () => {
-        console.log("Save clicked");
         if (name === "" || location === "") {
             alert("All fields are required");
             return;
@@ -27,7 +26,6 @@ function AddCompany() {
             name: name,
             location: location,
         };
-        console.log(newCompany);
         addCompany(newCompany);
         navigate("/companies");
     };
@@ -66,6 +64,13 @@ function AddCompany() {
                 backgroundColor: "red",
                 marginTop: "10px"
             }} >Save</Button>
+            <Button onClick={() => navigate("/companies")} sx={{
+                fontSize: 20, 
+                color: "red",
+                backgroundColor: "blue",
+                marginTop: "10px"
+                }}>Cancel</Button>
+
 
         </Container>
     );

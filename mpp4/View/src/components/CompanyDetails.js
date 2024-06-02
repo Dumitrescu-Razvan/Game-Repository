@@ -1,9 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Typography, Box } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { Typography, Box, Container, Button, ButtonGroup } from '@mui/material';
 import { getCompany } from '../Service/Service';
 
 function CompanyDetails() {
+  const navigate = useNavigate();
   const { id } = useParams();
   const [company, setCompany] = React.useState(null);
 
@@ -18,11 +20,22 @@ function CompanyDetails() {
   }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-      <Typography sx={{ fontSize: 20, color: 'darkblue' }} >{company.name}</Typography>
-      <Typography variant="body1">Company ID: {company.id}</Typography>
-      <Typography variant="body1">Company Location: {company.location}</Typography>
-    </Box>
+    <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <Typography variant="h4" sx={{ fontSize: 20, color: 'darkblue' }}>
+        {company.name}
+      </Typography>
+      <Typography variant="h6" sx={{ fontSize: 16, color: 'darkred' }}>
+        {company.location}
+      </Typography>
+      <ButtonGroup>
+        <Button variant="contained" color="secondary" onClick={()=>{navigate("/companies")}}>
+          Back
+        </Button>
+        <Button variant="contained" color="primary" onClick={()=>{navigate(`/editcompany/${company.id}`)}}>
+          Edit
+        </Button>
+      </ButtonGroup>  
+    </Container>
   );
 }
 

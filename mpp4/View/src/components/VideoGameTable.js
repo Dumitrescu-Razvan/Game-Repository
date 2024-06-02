@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, ButtonGroup, Typography, TableSortLabel, Container, TablePagination } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { deleteGame, getGames, getCompanies, authToken } from '../Service/Service'; // Import the necessary functions from the service file
+import { deleteGame, getGames, getCompanies } from '../Service/Service'; // Import the necessary functions from the service file
 import GameYearPieChart from './PieChart';
 
 function VideoGameTable() {
@@ -20,8 +20,11 @@ function VideoGameTable() {
     const [selectedRow, setSelectedRow] = React.useState(null);
     const [serverStatus, setServerStatus] = React.useState(false);
     const [_, setCompanies] = React.useState([]);
+    const [userType, setUserType] = React.useState(0);
 
     useEffect(() => {
+        setUserType(parseInt(localStorage.getItem('role')));
+        console.log(userType);
         getGames()
             .then((data) => {
                 setSortedData(data);
@@ -57,11 +60,6 @@ function VideoGameTable() {
                 setServerStatus(true);
                 attempts = 0; // reset attempts count on successful connection
             };
-            ws.onmessage = (event) => {
-                console.log('Received message:', event.data);
-                //setGames(data);
-                //setSortedData(data); 
-            };
             ws.onerror = (event) => {
                 console.error('Websocket error:', event);
             }
@@ -92,28 +90,23 @@ function VideoGameTable() {
     };
 
     const handleRowClick = (id) => {
-        console.log(`Row ${id} clicked`);
         setSelectedRow(selectedRow === id ? null : id);
     };
 
     const handleAddClick = () => {
-        console.log('Button clicked');
         navigate('/add');
         setSortedData([...sortedData]);
     };
 
     const handleViewClick = (id) => {
-        console.log(`View button clicked for ${id}`);
         navigate(`/game/${id}`);
     };
 
     const handleEditClick = (id) => {
-        console.log(`Edit button clicked for ${id}`);
         navigate(`/edit/${id}`);
     };
 
     const handleDeleteClick = async (id) => {
-        console.log(`Delete button clicked for ${id}`);
         if (window.confirm('Are you sure you want to delete this game?')) {
             await deleteGame(id); // Call the new deleteGame function from the service
             const data = await getGames(); // Fetch updated data after deletion
@@ -132,8 +125,13 @@ function VideoGameTable() {
     };
 
     const handleViewCompany = (id) => {
-        console.log(`View company button clicked for ${id}`);
         navigate(`/company/${id}`);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('role');
+        navigate('/login');
     };
 
     // useEffect(() => {
@@ -154,7 +152,7 @@ function VideoGameTable() {
         , {});
 
     return (
-        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+        <Container sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
             <header sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'red' }}>
                 <h1>Video Game Table</h1>
                 {!serverStatus && <h2>Server is offline</h2>}
@@ -220,9 +218,9 @@ function VideoGameTable() {
                                                 justifyContent='center'
                                                 alignItems='center'
                                             >
-                                                <ButtonGroup 
-                                                sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                                                variant='text'>
+                                                <ButtonGroup
+                                                    sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                                                    variant='text'>
                                                     <Button
                                                         style={{ backgroundColor: 'lightblue' }}
                                                         onClick={() => handleViewClick(row.id)}
@@ -272,20 +270,39 @@ function VideoGameTable() {
                             alignItems='center'
                         >
                             <Button
-                                sx={{ backgroundColor: 'lightblue' }}
-                                onClick={handleAddClick}
-                                align='center'
-                            >
-                                Add Game
-                            </Button>
-                            <Button
                                 sx={{ backgroundColor: 'lightgreen' }}
                                 onClick={handleChangeTable}
                                 align='center'
                             >
                                 Change Table
                             </Button>
+                            <Button
+                                sx={{ backgroundColor: 'lightblue' }}
+                                onClick={handleAddClick}
+                                align='center'
+                                //make this visible only if the userType >= 1
+                                style={{ visibility: userType >= 1 ? 'visible' : 'hidden' }}
+                            >
+                                Add Game
+                            </Button>
+                            <Button
+                                sx={{ backgroundColor: 'lightcoral' }}
+                                onClick={() => navigate('/users')}
+                                align='center'
+                                style={{ visibility: userType >= 2 ? 'visible' : 'hidden' }}
+
+                            >
+                                All Users
+                            </Button>
                         </ButtonGroup>
+                        <Button
+                            sx={{ backgroundColor: 'lightcoral', alignContent: 'right', position: 'relative', left: '94%'}}
+                            onClick={handleLogout}
+                            align='center'
+                        >
+                            Logout
+
+                        </Button>
                     </Table>
                 </TableContainer>
                 <GameYearPieChart data={gameYearData} options={gameYearData} />

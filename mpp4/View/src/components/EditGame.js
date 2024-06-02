@@ -36,7 +36,6 @@ function EditGame() {
     }
 
     const handleSave = () => {
-        console.log("Save clicked");
         if (title === "" || year === "" || rating === "") {
             alert("All fields are required");
             return;
@@ -52,7 +51,7 @@ function EditGame() {
             company_id: parseInt(company_id),
         };
         editGame(newGame);
-        navigate("/");
+        navigate("/games");
     };
 
     return (
