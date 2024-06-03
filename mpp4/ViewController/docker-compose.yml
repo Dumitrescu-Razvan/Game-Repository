@@ -1,0 +1,9 @@
+services:
+  rustapp:
+    build: .
+    image: viewcontroller-rustapp
+    ports:
+      - "8000:8000"
+      - "3002:3002"
+    environment:
+      - DATABASE_URL=postgres://postgres:Password!@videogamempp.postgres.database.azure.com/games

@@ -9,6 +9,9 @@ use rocket::Config;
 use rocket_cors::{AllowedOrigins, CorsOptions};
 use std::env;
 
+use diesel::prelude::*;
+
+
 use rocket::futures::StreamExt;
 use tokio::net::TcpListener;
 
@@ -32,10 +35,21 @@ async fn main() {
     dotenv().ok();
     let connection = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
 
+    //verify the connection
+    let _ = diesel::pg::PgConnection::establish(&connection)
+        .expect("Error connecting to the database");
+
     let (tx, mut rx) = tokio::sync::oneshot::channel();
 
+    let allow_origins = AllowedOrigins::some_exact(&[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
+        "http://192.168.1.132:3000",
+        ]);
+
     let cors = CorsOptions::default()
-        .allowed_origins(AllowedOrigins::all())
+        .allowed_origins(allow_origins)
         .allowed_methods(
             vec![
                 Method::Get,
@@ -53,6 +67,8 @@ async fn main() {
         .expect("CORS configuration failed");
 
     let config = Config::figment().merge(("port", 3001));
+    //make the server run on 0.0.0.0
+    let config = Config::figment().merge(("address", "0.0.0.0"));
 
     let game_repository = GameRepository::new(&connection);
     let user_repository = UserRepository::new(&connection);
@@ -61,7 +77,7 @@ async fn main() {
     let ws_repo = GameRepository::new(&connection);
 
     let ws_task = tokio::spawn(async move {
-        let listener = TcpListener::bind("localhost:3002").await.unwrap();
+        let listener = TcpListener::bind("0.0.0.0:3002").await.unwrap();
         println!("Listening on: {}", listener.local_addr().unwrap());
 
         loop {

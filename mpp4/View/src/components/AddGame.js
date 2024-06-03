@@ -74,6 +74,7 @@ function AddGame() {
 
             <TextField label="Rating" value={rating} onChange={handleRatingChange} variant="outlined" sx={{fontSize: 20, color: "darkblue"}}/>
             <select name="company" onChange={handleCompanyChange} sx={{fontSize: 20, color: "darkblue"}}>
+                <option value="1">Select Company</option>
                 {companies.map((company) => (
                     <option key={company.id} value={company.id}>{company.name}</option>
                 ))}

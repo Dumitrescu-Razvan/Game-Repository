@@ -11,7 +11,7 @@ CREATE TABLE games (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     release_year INTEGER NOT NULL,
-    rating DECIMAL NOT NULL,
+    rating INTEGER NOT NULL,
     company_id INT NOT NULL,
     FOREIGN KEY (company_id) REFERENCES companies (id)
 );

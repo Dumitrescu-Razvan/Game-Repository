@@ -1,0 +1,15 @@
+# Ignore target directory (compiled binaries, dependencies, etc.)
+target/
+
+# Ignore Cargo lock file
+Cargo.lock
+
+# Ignore any build artifacts created by the IDE or editor
+.idea/
+.vscode/
+
+# Ignore any temporary files or build artifacts
+*.swp
+*.swo
+*.bak
+*.tmp
